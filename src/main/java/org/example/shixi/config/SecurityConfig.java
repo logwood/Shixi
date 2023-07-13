@@ -47,9 +47,9 @@ public class SecurityConfig {
                 .authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll().anyRequest().authenticated()
                 .accessDecisionManager(accessDecisionManager)
                 .and()
-                .addFilterAfter(loginAuthenticationFilter, LogoutFilter.class)
+                .addFilterAfter(loginAuthenticationFilter, LogoutFilter.class)//增加filter
                 .addFilterAfter(tokenAuthenticationFilter, LoginAuthenticationFilter.class)
-                .exceptionHandling().accessDeniedHandler(authorizationDeniedHandler)
+                .exceptionHandling().accessDeniedHandler(authorizationDeniedHandler)//增加一个拒绝访问的handler
                 .and()
                 .build();
     }

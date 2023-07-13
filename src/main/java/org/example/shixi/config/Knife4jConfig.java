@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class Knife4Config {
+public class Knife4jConfig {
     @Bean
-    public OpenAPI ApiMap()
+    public OpenAPI openAPI()
     {
         return new OpenAPI()
                 .info(new Info()
                         .title("基础版本Api库")
-                        .description("系统管理，用户")
+                        .description("系统管理：用户、角色、权限、资源、认证、鉴权")
                         .version("1.2.0"));
     }
     @Bean

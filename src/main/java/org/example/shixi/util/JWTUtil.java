@@ -39,7 +39,7 @@ public class JWTUtil {
                 .sign(Algorithm.HMAC256(SECRET));
         return AESUtil.encrypt(token);
     }
-
+    //
     /**
      * 解析 token
      * @author liulinchuan

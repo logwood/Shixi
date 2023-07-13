@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 @Data
 @Component
-@ConfigurationProperties(prefix = "example.shixi.auth")
+@ConfigurationProperties(prefix = "thinking.auth")
 public class WhiteListProperties {
     private List<String> whiteList;
 }
