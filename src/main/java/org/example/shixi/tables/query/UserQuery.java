@@ -1,10 +1,10 @@
 package org.example.shixi.tables.query;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.Size;
 
 @EqualsAndHashCode(callSuper = true)
 @Schema(description = "查询条件")

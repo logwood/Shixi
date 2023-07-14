@@ -32,7 +32,6 @@ public class SecurityConfig {
                                                    AuthorizationAccessDecisionVoter authorizationAccessDecisionVoter,
                                                    AuthorizationDeniedHandler authorizationDeniedHandler,
                                                    WhiteListProperties whiteListProperties) throws Exception {
-
         List<AccessDecisionVoter<?>> accessDecisionVoterList = new ArrayList<>(1);
         accessDecisionVoterList.add(new WebExpressionVoter()); // authorizeRequests 配置的权限验证
         accessDecisionVoterList.add(authorizationAccessDecisionVoter);
@@ -44,7 +43,9 @@ public class SecurityConfig {
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .authorizeRequests().antMatchers(whiteList.toArray(new String[0])).permitAll().anyRequest().authenticated()
+                .authorizeRequests()
+                .requestMatchers(whiteList.toArray(new String[0]))
+                .permitAll().anyRequest().authenticated()
                 .accessDecisionManager(accessDecisionManager)
                 .and()
                 .addFilterAfter(loginAuthenticationFilter, LogoutFilter.class)//增加filter

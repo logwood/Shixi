@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.models.security.SecurityScheme;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,9 +24,10 @@ public class UserEntity extends BaseEntity{
     @NotBlank(message = "密码不为空")
     @Schema(description = "密码")
     private String password;
+    @Size(max = 1,message = "locked属性只能为0-1")
     @Schema(description = "0(未锁定)，1(已锁定)")
     private String locked;
-
+    @Size(max = 1,message = "deleted属性只能为0-1")
     @Schema(description = "0(未删除)，1(已删除)")
     private String deleted;
     @NotBlank(message = "姓名不能为空")
