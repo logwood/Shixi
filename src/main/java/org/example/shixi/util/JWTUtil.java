@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import org.apache.el.parser.Token;
 import org.example.shixi.tables.UserInfo;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,9 +38,8 @@ public class JWTUtil {
                 .withClaim("name", userInfo.getName())
                 .withClaim("roles", userInfo.getRoleIdList())
                 .sign(Algorithm.HMAC256(SECRET));
-        return AESUtil.encrypt(token);
+        return token;
     }
-    //
     /**
      * 解析 token
      * @author liulinchuan
@@ -48,7 +48,6 @@ public class JWTUtil {
      * @return 认证信息
      */
     public static Authentication decodeToken(String token) {
-        token = AESUtil.decrypt(token);
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
         DecodedJWT decodedJWT = verifier.verify(token);
         decodedJWT = verifier.verify(decodedJWT);

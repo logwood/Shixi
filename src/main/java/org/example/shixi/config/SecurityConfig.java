@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors()
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//因为前后端分离，所以要STATELESS
                 .and()
                 .authorizeRequests()
                 .requestMatchers(whiteList.toArray(new String[0]))

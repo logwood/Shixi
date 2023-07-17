@@ -18,7 +18,7 @@ public class MybatisPlusConfig {
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
-        interceptor.addInnerInterceptor( new PaginationInnerInterceptor(DbType.MYSQL));
+        interceptor.addInnerInterceptor( new PaginationInnerInterceptor(DbType.MYSQL));//进行分页配置。
         return interceptor;
     }
 
@@ -32,7 +32,7 @@ public class MybatisPlusConfig {
             @Override
             public void insertFill(MetaObject metaObject) {
                 this.setFieldValByName("createTime", LocalDateTime.now(), metaObject);
-            }
+            }//setFieldValByName通过确定元数据的变量名改变其值。
 
             @Override
             public void updateFill(MetaObject metaObject) {

@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.shixi.mapper.UserRoleMapper">
+    <sql id="Base_Column_List">
+        user_id, role_id
+    </sql>
 
+    <select id="listByUserId" resultType="org.example.shixi.tables.entity.RoleEntity">
+        select
+            b.*
+        from
+            user_role a
+                left join role b on
+                        a.role_id = b.id
+                    and b.deleted = '0'
+        where
+            a.user_id = #{userId}
+    </select>
 </mapper>

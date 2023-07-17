@@ -21,44 +21,60 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AuthenticationService {
+
     @Autowired
     private ResourceService resourceService;
+
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
     @Autowired
     private UserService userService;
-    public AuthDTO authInfo(){
-        // 获取当前认证了的 principal(当事人),或者 request token (令牌)
-        // 如果没有认证，会是 null,该例子是认证之后的情况
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    /**
+     * 获取认证信息
+     * @author liulinchuan
+     * @since 2023/1/16 14:15
+     * @return 认证信息
+     */
+    public AuthDTO authInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserInfo userInfo = (UserInfo) authentication.getPrincipal();
-        //Authentication 是SecurityContext中的一个
-        AuthDTO authDTO =new AuthDTO();
+        AuthDTO authDTO = new AuthDTO();
         authDTO.setUsername(userInfo.getUsername());
         authDTO.setName(userInfo.getName());
         authDTO.setToken(JWTUtil.encodeToken(authentication));
-        if("root".equals(userInfo.getUsername())){
+        if ("root".equals(userInfo.getUsername())) {
             authDTO.setResourceTreeDTOList(resourceService.tree());
-        }else{
-            authDTO.setResourceTreeDTOList(resourceService.tree((userInfo.getRoleIdList())));
+        } else {
+            authDTO.setResourceTreeDTOList(resourceService.tree(userInfo.getRoleIdList()));
         }
         return authDTO;
     }
-    public boolean changePassword(PasswordDTO passwordDTO){
-        UserInfo userInfo= UserInfoUtil.getUserInfo();
+
+    /**
+     * 修改密码
+     * @author liulinchuan
+     * @since 2023/2/2 11:03
+     * @param passwordDTO 密码信息
+     * @return 是否修改成功
+     */
+    public boolean changePassword(PasswordDTO passwordDTO) {
+        UserInfo userInfo = UserInfoUtil.getUserInfo();
         UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken
-                .unauthenticated(userInfo.getUsername(),passwordDTO.getPassword());
-        try{
+                .unauthenticated(userInfo.getUsername(), passwordDTO.getPassword());
+        try {
             authenticationManager.authenticate(authRequest);
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             throw new ServiceException(MessageConstant.PASSWORD_ERROR);
         }
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userInfo.getUserId());
-        userEntity.setPassword(passwordEncoder.encode(passwordDTO.getPassword()));
-        boolean result =userService.updateById(userEntity);
+        userEntity.setPassword(passwordEncoder.encode(passwordDTO.getNewPassword()));
+        boolean result = userService.updateById(userEntity);
         userEntity.setPassword(null);
         return result;
     }

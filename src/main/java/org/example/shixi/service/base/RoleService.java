@@ -11,6 +11,7 @@ import org.example.shixi.tables.entity.RoleEntity;
 import org.example.shixi.tables.entity.RoleResourceEntity;
 import org.example.shixi.tables.entity.UserRoleEntity;
 import org.example.shixi.tables.query.RoleQuery;
+import org.example.shixi.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +52,26 @@ public class RoleService extends ServiceImpl<RoleMapper, RoleEntity> {
         Integer updateFlag = roleDTO.getUpdateFlag();
         if (updateFlag == null || updateFlag < 0 || updateFlag > 2) {
             throw new ServiceException(MessageConstant.PARAM_ERROR);
+        }
+        Integer roleId = roleDTO.getId();
+        RoleEntity roleEntityExist =get(roleDTO.getName());
+        if(roleEntityExist != null && !roleEntityExist.getId().equals(roleId)){
+            throw new ServiceException(MessageConstant.ROLE_EXISTS);
+        }
+        super.updateById(BeanUtil.INSTAMCE.copy(roleDTO));
+        if (updateFlag == 0){
+            roleResourseService.delete(roleId);
+            roleResourseService.saveBatch(roleDTO.getRoleResourceEntityList());
+        }
+        else if(updateFlag == 1){
+            userRoleService.deleteByRoleId(roleId);
+            userRoleService.saveBatch(roleDTO.getUserRoleEntityList());
+        } else {
+            roleResourseService.delete(roleId);
+            userRoleService.deleteByRoleId(roleId);
+            roleResourseService.saveBatch(roleDTO.getRoleResourceEntityList());
+            userRoleService.saveBatch(roleDTO.getUserRoleEntityList());
+
         }
         return true;
     }

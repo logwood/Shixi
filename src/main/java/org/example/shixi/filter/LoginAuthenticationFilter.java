@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,71 +38,70 @@ import java.nio.charset.StandardCharsets;
  */
 @Component
 public class LoginAuthenticationFilter extends OncePerRequestFilter {
+
+
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private AuthenticationService authenticationService;
 
     @Qualifier("handlerExceptionResolver")
     @Autowired
     private HandlerExceptionResolver handlerExceptionResolver;
 
-    /**
-     * 重写doFilterInternal 方法
-     * doFilter是一种特殊的方法，其用来进行doFilterInternal的函数，所以重写doFilterInternal就可以自定义Filter
-     * 状态
-     */
+    @Autowired
+    private AuthenticationService authenticationService;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        if(!"login".equals(request.getServletPath())){
-            filterChain.doFilter(request,response);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        if (!"/login".equals(request.getServletPath())) {
+            filterChain.doFilter(request, response);
             return;
-        }//若login放行。
-        if(!Methods.POST_STRING.equals(request.getMethod())){
-            handlerExceptionResolver.resolveException(request,response,null,
-                    new AuthenticationServiceException(MessageConstant.METHOD_NOT_POST));
         }
+        if (!Methods.POST_STRING.equals(request.getMethod())) {
+            handlerExceptionResolver.resolveException(request, response, null,
+                    new AuthenticationServiceException(MessageConstant.METHOD_NOT_POST));
+            return;
+        }
+        // 从 form 表单获取
         String username = request.getParameter("username");
         username = (username != null) ? username.trim() : null;
-        //删除空白
         String password = request.getParameter("password");
-        if(!StringUtils.hasText(username) && !StringUtils.hasText(password)){
-            InputStreamReader inputStreamReader =new InputStreamReader(request.getInputStream());
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        // 从 body 获取
+        if (!StringUtils.hasText(username) && !StringUtils.hasText(password)) {
+            InputStreamReader isr = new InputStreamReader(request.getInputStream());
+            BufferedReader br = new BufferedReader(isr);
             String line;
-            StringBuilder stringBuilder =new StringBuilder();
-            while ((line = bufferedReader.readLine())!= null){
-                stringBuilder.append(line);
+            StringBuilder sb = new StringBuilder();
+            while((line = br.readLine()) != null) {
+                sb.append(line);
             }
             LoginDTO loginDTO;
-            try{
-                loginDTO = JsonUtil.toobj(stringBuilder.toString(), LoginDTO.class);
-            } catch (JsonProcessingException e){
-                handlerExceptionResolver.resolveException(request,response,null,new ServiceException(MessageConstant.PARAM_ERROR));
+            try {
+                loginDTO = JsonUtil.toobj(sb.toString(), LoginDTO.class);
+            } catch (JsonProcessingException e) {
+                handlerExceptionResolver.resolveException(request, response, null,
+                        new ServiceException(MessageConstant.PARAM_ERROR));
                 return;
             }
-            //StringBuilder作为直接处理字符串的类，可以
             username = loginDTO.getUsername();
             password = loginDTO.getPassword();
-            if(!StringUtils.hasText(username)|| !StringUtils.hasText(password)){
+            if (!StringUtils.hasText(username) || !StringUtils.hasText(password)) {
                 handlerExceptionResolver.resolveException(request, response, null,
                         new ServiceException(MessageConstant.USERNAME_PASSWORD_NOT_BLANK));
                 return;
             }
         }
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken=UsernamePasswordAuthenticationToken
-                .unauthenticated(username,password);
+        UsernamePasswordAuthenticationToken authRequest = UsernamePasswordAuthenticationToken
+                .unauthenticated(username, password);
         try {
-            Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (Exception e){
+            Authentication authResult = authenticationManager.authenticate(authRequest);
+            SecurityContextHolder.getContext().setAuthentication(authResult);
+        } catch (BadCredentialsException e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
             return;
         }
-        AuthDTO authDTO =authenticationService.authInfo();
+        AuthDTO token = authenticationService.authInfo();
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter()
-                .write(JsonUtil.toJsonStr(RestResponse.ok(authDTO,MessageConstant.LOGIN_OK)));
+        response.getWriter().write(JsonUtil.toJsonStr(RestResponse.ok(token, MessageConstant.LOGIN_OK)));
     }
 }

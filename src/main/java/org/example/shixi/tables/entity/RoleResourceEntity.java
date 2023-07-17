@@ -19,4 +19,3 @@ public class RoleResourceEntity extends BaseEntity{
     @Getter private String authority;
 
 }
-

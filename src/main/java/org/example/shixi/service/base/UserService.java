@@ -9,7 +9,7 @@ import org.example.shixi.exception.ServiceException;
 import org.example.shixi.mapper.UserMapper;
 import org.example.shixi.tables.entity.UserEntity;
 import org.example.shixi.tables.query.UserQuery;
-import org.example.shixi.util.AESUtil;
+import org.example.shixi.util.CryptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class UserService extends ServiceImpl<UserMapper,UserEntity> {
         if(exists(userEntity.getUsername())){
             throw new ServiceException(MessageConstant.USER_EXISTS);
         }
-        userEntity.setPassword(passwordEncoder.encode(AESUtil.encrypt("wang@Thinking")));
+        userEntity.setPassword(passwordEncoder.encode("user@Thinking"));
         return super.save(userEntity);
     }
     @Transactional(rollbackFor = Exception.class)

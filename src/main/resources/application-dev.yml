@@ -53,5 +53,12 @@ mybatis-plus:
 thinking:
   auth:
     white-list:
-      - /**
+      - /login
+      - /test
+      # start 接口文档相关
+      - /doc.html
+      - /favicon.ico
+      - /webjars/**
+      - /v3/api-docs/*
+      - /v3/api-docs
       # end
