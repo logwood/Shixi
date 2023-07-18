@@ -32,6 +32,7 @@
        <junit.version>5.9.2</junit.version>
        <jackson-jsr310.version>2.13.0</jackson-jsr310.version>
        <kotlin.version>1.9.0</kotlin.version>
+       <spring-cloud.version>2022.0.1</spring-cloud.version>
    </properties>
     <dependencyManagement>
         <dependencies>
@@ -46,8 +47,25 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <version>4.0.0</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

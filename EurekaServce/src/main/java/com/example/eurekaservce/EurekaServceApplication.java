@@ -1,15 +1,15 @@
-package org.example.shixi;
+package com.example.eurekaservce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 
-@EnableEurekaServer
 @SpringBootApplication
-public class ShixiApplication {
+@EnableEurekaServer
+public class EurekaServceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ShixiApplication.class, args);
+        SpringApplication.run(EurekaServceApplication.class, args);
     }
 
 }

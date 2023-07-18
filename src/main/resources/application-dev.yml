@@ -29,6 +29,8 @@ spring:
       minimum-idle: 10
       maximum-pool-size: 20
       connection-test-query: SELECT 1
+  application:
+    name: Main-Process
 
 springdoc:
   show-actuator: true
@@ -61,4 +63,15 @@ thinking:
       - /webjars/**
       - /v3/api-docs/*
       - /v3/api-docs
+      - /eureka/
       # end
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    hostname: localhost
+    instance-id: ${eureka.instance.hostname}:${server.port}
+    prefer-ip-address: true
