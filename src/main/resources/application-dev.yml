@@ -31,7 +31,9 @@ spring:
       connection-test-query: SELECT 1
   application:
     name: Main-Process
-
+  cloud:
+    config:
+      fail-fast=true
 springdoc:
   show-actuator: true
 
