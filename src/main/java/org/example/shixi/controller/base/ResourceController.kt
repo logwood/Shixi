@@ -6,14 +6,13 @@ import lombok.extern.slf4j.Slf4j
 import org.example.shixi.controller.RestResponse
 import org.example.shixi.service.base.ResourceService
 import org.example.shixi.service.base.RoleResourseService
+import org.example.shixi.tables.dto.ResourceTreeDTO
 import org.example.shixi.tables.entity.ResourceEntity
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
+import kotlin.collections.ArrayList
 
 @Slf4j
 @Tag(name = "资源管理")
@@ -33,5 +32,31 @@ class ResourceController {
             RestResponse<Boolean>{
         log.info("/resource#post:{}",resourceEntity)
         return RestResponse.addResponse(resourceService!!.add(resourceEntity))
+    }
+    @Operation(summary = "删除")
+    @DeleteMapping
+    fun delete(@RequestParam id: Int):RestResponse<Boolean>{
+        log.info("resource#delete:{}",id)
+        return RestResponse.deleteResponse(resourceService!!.delete(id))
+    }
+    @Operation(summary = "修改")
+    @PutMapping
+    fun update(@RequestBody @Validated resourceEntity:ResourceEntity):RestResponse<Boolean>{
+        log.info("/resource#put:{}",resourceEntity)
+        return RestResponse.updateResponse(resourceService!!.updateById(resourceEntity))
+    }
+    @Operation(summary = "资源树")
+    @GetMapping
+    fun tree():RestResponse<List<ResourceTreeDTO>>{
+        log.info("/resource#get")
+        return RestResponse.queryResponse(resourceService!!.tree())
+    }
+    @Operation(summary = "角色资源列表")
+    @GetMapping("/list")
+    fun list(@RequestParam roleId:Int):RestResponse<List<ResourceEntity>>{
+        log.info("/resource/list#get:{}",roleId)
+        val roleIdList: MutableList<Int> = ArrayList()
+        roleIdList += roleId
+        return RestResponse.queryResponse(roleResourceService!!.listResource(roleIdList))
     }
 }

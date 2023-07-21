@@ -34,6 +34,13 @@ spring:
   cloud:
     config:
       fail-fast=true
+  rabbitmq:
+    port: 5672
+    host: 127.0.0.1
+    username: swsk33
+    password: 12345
+
+
 springdoc:
   show-actuator: true
 
