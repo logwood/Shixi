@@ -32,14 +32,17 @@ public class ExcelConfig extends AbstractMergeStrategy {
         int currentCellIndex = cell.getColumnIndex();
         // 判断该列是否需要合并
         if (mergeCellIndex.contains(currentCellIndex)) {
+            /*
+                getCell获取第i列
+                row.getCell(i)
+                new DataFormatter().formatCellValue(cell)
+                格式化当前cell对应数据为String
+             */
+            String currentCellValue = new DataFormatter().formatCellValue(cell);
             // getRow获取第i行
-            Row row = sheet.getRow(currentCellIndex);
-            /* getCell获取第i列
-               row.getCell(i)
-               new DataFormatter().formatCellValue(cell)
-               格式化当前cell对应数据为String
-            */
-            String currentCellValue = new DataFormatter().formatCellValue(row.getCell(currentCellIndex));
+            //cell.setCellType(CellType.STRING);
+            ////获取具体单元格数据
+            //String currentCellValue = cell.getStringCellValue();
             int currentRowIndex = cell.getRowIndex();
             if (!lastRow.containsKey(currentCellIndex)) {
                 // 记录首行起始位置
@@ -72,11 +75,11 @@ public class ExcelConfig extends AbstractMergeStrategy {
 }
 
 class MergeRange {
-    public int startRow;
+    public final int startRow;
     public int endRow;
-    public int startCell;
-    public int endCell;
-    public String lastValue;
+    public final int startCell;
+    public final int endCell;
+    public final String lastValue;
 
     public MergeRange(String lastValue, int startRow, int endRow, int startCell, int endCell) {
         this.startRow = startRow;

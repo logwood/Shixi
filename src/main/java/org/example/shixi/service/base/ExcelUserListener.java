@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class ExcelUserListener extends AnalysisEventListener<UserEntity> {
 
-    List<UserEntity> list = new ArrayList<>();
+    final List<UserEntity> list = new ArrayList<>();
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     /**
