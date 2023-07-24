@@ -76,7 +76,6 @@ public class ResourceService extends ServiceImpl<ResourceMapper,ResourceEntity> 
                     resourceEntityList.add(resourceEntity);
                     getParent(resourceEntity,all);
                 });
-
         /*通过循环过滤得到父节点，然后通过获取父节点进行进一步的递归，一直到主节点。*/
     }
 }

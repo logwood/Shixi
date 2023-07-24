@@ -1,5 +1,6 @@
 package org.example.shixi.constant;
 
+
 public class MessageConstant {
     private MessageConstant() {
     }
@@ -12,7 +13,7 @@ public class MessageConstant {
     public static final String USER_NOT_EXISTS = "用户不存在";
     public static final String USER_EXISTS = "用户已存在";
     public static final String ROLE_EXISTS = "角色已存在";
-    public static final String USER_ROLE_EXISTS = "存在绑定用户";
+    //public static final String USER_ROLE_EXISTS = "存在绑定用户";
     public static final String ROLE_RESOURCE_EXISTS = "存在绑定用户";
     public static final String USERNAME_NOT_BLANK = "用户名不能为空";
     public static final String USERNAME_PASSWORD_NOT_BLANK = "用户名或密码不能为空";
