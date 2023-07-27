@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class ResourceService extends ServiceImpl<ResourceMapper,ResourceEntity> {
     @Autowired
-    private RoleResourseService roleResourseService;
+    private RoleResourceService roleResourceService;
     private List<ResourceEntity> resourceEntityList;
     public boolean add(ResourceEntity resourceEntity){
         Assert.notNull(resourceEntity, MessageConstant.RESOURCE_NOT_NULL);
@@ -29,7 +29,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper,ResourceEntity> 
     }
     public boolean delete(Integer id) {
         Assert.notNull(id, MessageConstant.ID_NOT_NULL);
-        if (roleResourseService.exists(id)) {
+        if (roleResourceService.exists(id)) {
             throw new ServiceException(MessageConstant.ROLE_RESOURCE_EXISTS);
         }
         return super.removeById(id);
@@ -48,7 +48,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper,ResourceEntity> 
     }
     public List<ResourceTreeDTO> tree(List<Integer>roleIdList){
         resourceEntityList=new ArrayList<>();
-        List<ResourceEntity> resourceEntityList1=roleResourseService.listResource(roleIdList);
+        List<ResourceEntity> resourceEntityList1= roleResourceService.listResource(roleIdList);
         if(CollectionUtils.isEmpty(resourceEntityList1)){
             return Collections.emptyList();
         }

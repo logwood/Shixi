@@ -16,7 +16,7 @@ import java.util.List;
 
 
 @Service
-public class RoleResourseService extends ServiceImpl<RoleResourceMapper, RoleResourceEntity> {
+public class RoleResourceService extends ServiceImpl<RoleResourceMapper, RoleResourceEntity> {
     public boolean delete(Integer roleId){
         Assert.notNull(roleId, MessageConstant.ID_NOT_NULL);
         //roleId不能为空，为空抛出异常。

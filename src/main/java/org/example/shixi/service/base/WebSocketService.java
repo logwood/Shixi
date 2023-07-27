@@ -50,7 +50,7 @@ public class WebSocketService {
             try{
                 item.sendMessage(message);
             }catch (Exception e){
-                log.info(e.getStackTrace().toString());
+                e.printStackTrace();
             }
         }
     }
@@ -70,7 +70,7 @@ public class WebSocketService {
     private void sendMessage(String connSuccess)throws IOException{
         this.session.getBasicRemote().sendText(connSuccess);
     }
-    public void sendInfo(String message,@PathParam("sid")String sid)throws IOException{
+    public void sendInfo(String message,@PathParam("sid")String sid){
         log.info("推送消息到窗口"+sid+"，推送内容"+message);
         for(WebSocketService item:writeArraySet){
             try{

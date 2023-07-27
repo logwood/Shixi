@@ -1,7 +1,9 @@
 package org.example.shixi.util;
 
+import org.example.shixi.tables.dto.GoodsDTO;
 import org.example.shixi.tables.dto.ResourceTreeDTO;
 import org.example.shixi.tables.dto.RoleDTO;
+import org.example.shixi.tables.entity.GoodsEntity;
 import org.example.shixi.tables.entity.ResourceEntity;
 import org.example.shixi.tables.entity.RoleEntity;
 import org.mapstruct.Mapper;
@@ -21,4 +23,6 @@ public interface BeanUtil {
     List<RoleDTO> copyRoleEntity(List<RoleEntity> list);
 
     List<ResourceTreeDTO> copyResourceEntity(List<ResourceEntity> list);
+
+    List<GoodsDTO> copyGoodsEntity(List<GoodsEntity> list);
 }

@@ -59,6 +59,7 @@ public class LoginAuthenticationFilter extends OncePerRequestFilter {
         if (!Methods.POST_STRING.equals(request.getMethod())) {
             handlerExceptionResolver.resolveException(request, response, null,
                     new AuthenticationServiceException(MessageConstant.METHOD_NOT_POST));
+            //获取request方法
             return;
         }
         // 从 form 表单获取

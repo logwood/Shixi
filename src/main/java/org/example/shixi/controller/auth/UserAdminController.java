@@ -3,7 +3,6 @@ package org.example.shixi.controller.auth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
-import jakarta.servlet.http.HttpServletRequest;
 import org.example.shixi.controller.RestResponse;
 import org.example.shixi.service.base.UserInfoService;
 import org.springframework.http.MediaType;

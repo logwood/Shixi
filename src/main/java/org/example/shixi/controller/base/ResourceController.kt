@@ -4,15 +4,17 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import lombok.extern.slf4j.Slf4j
 import org.example.shixi.controller.RestResponse
+import org.example.shixi.service.auth.AuthenticationService
 import org.example.shixi.service.base.ResourceService
-import org.example.shixi.service.base.RoleResourseService
+import org.example.shixi.service.base.RoleResourceService
+import org.example.shixi.tables.UserInfo
 import org.example.shixi.tables.dto.ResourceTreeDTO
 import org.example.shixi.tables.entity.ResourceEntity
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
-import kotlin.collections.ArrayList
 
 @Slf4j
 @Tag(name = "资源管理")
@@ -23,7 +25,9 @@ class ResourceController {
     private val resourceService: ResourceService? = null
 
     @Autowired
-    private val roleResourceService: RoleResourseService? = null
+    private val authenticationService: AuthenticationService? = null
+    @Autowired
+    private val roleResourceService: RoleResourceService? = null
 
     private val log = LoggerFactory.getLogger(ResourceController::class.java)
     @Operation(summary = "新增")
@@ -48,8 +52,10 @@ class ResourceController {
     @Operation(summary = "资源树")
     @GetMapping
     fun tree():RestResponse<List<ResourceTreeDTO>>{
+        val authentication = SecurityContextHolder.getContext().authentication
+        val userInfo = authentication.principal as UserInfo
         log.info("/resource#get")
-        return RestResponse.queryResponse(resourceService!!.tree())
+        return RestResponse.queryResponse(resourceService!!.tree(userInfo.roleIdList))
     }
     @Operation(summary = "角色资源列表")
     @GetMapping("/list")

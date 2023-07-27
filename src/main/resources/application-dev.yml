@@ -39,6 +39,12 @@ spring:
     host: 127.0.0.1
     username: swsk33
     password: 12345
+  data:
+    redis:
+      database: 0
+      host: localhost
+      password: 12345
+      port: 6379
 
 
 springdoc:
@@ -66,6 +72,8 @@ thinking:
     white-list:
       - /login
       - /test
+      - /trying
+      - /trying/**
       # start 接口文档相关
       - /doc.html
       - /favicon.ico

@@ -22,7 +22,6 @@ class WebSocketController {
             WebSocketService::sendInfo.call(message,cid)
             result["code"] = cid
             result["msg"] =message
-
         }catch (e:IOException){
             e.printStackTrace()
         }

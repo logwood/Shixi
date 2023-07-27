@@ -26,7 +26,7 @@ public class RoleService extends ServiceImpl<RoleMapper, RoleEntity> {
     @Autowired
     private UserRoleService userRoleService;
     @Autowired
-    private RoleResourseService roleResourseService;
+    private RoleResourceService roleResourceService;
     @Transactional(rollbackFor = Exception.class)
     public boolean add(RoleDTO roleDTO){
         Assert.notNull(roleDTO, MessageConstant.ROLE_NOT_NULL);
@@ -38,7 +38,7 @@ public class RoleService extends ServiceImpl<RoleMapper, RoleEntity> {
         List<UserRoleEntity> userRoleEntityList = roleDTO.getUserRoleEntityList();
         if(!CollectionUtils.isEmpty(roleResourceEntityList)){
             roleResourceEntityList.forEach(roleResourceEntity -> roleResourceEntity.setRoleId(roleDTO.getId()));
-            roleResourseService.saveBatch(roleResourceEntityList);
+            roleResourceService.saveBatch(roleResourceEntityList);
         }
         if(!CollectionUtils.isEmpty(userRoleEntityList)){
             userRoleEntityList.forEach(userRoleEntity -> userRoleEntity.setRoleId(roleDTO.getId()));
@@ -60,16 +60,16 @@ public class RoleService extends ServiceImpl<RoleMapper, RoleEntity> {
         }
         super.updateById(BeanUtil.INSTAMCE.copy(roleDTO));
         if (updateFlag == 0){
-            roleResourseService.delete(roleId);
-            roleResourseService.saveBatch(roleDTO.getRoleResourceEntityList());
+            roleResourceService.delete(roleId);
+            roleResourceService.saveBatch(roleDTO.getRoleResourceEntityList());
         }
         else if(updateFlag == 1){
             userRoleService.deleteByRoleId(roleId);
             userRoleService.saveBatch(roleDTO.getUserRoleEntityList());
         } else {
-            roleResourseService.delete(roleId);
+            roleResourceService.delete(roleId);
             userRoleService.deleteByRoleId(roleId);
-            roleResourseService.saveBatch(roleDTO.getRoleResourceEntityList());
+            roleResourceService.saveBatch(roleDTO.getRoleResourceEntityList());
             userRoleService.saveBatch(roleDTO.getUserRoleEntityList());
 
         }
@@ -81,7 +81,7 @@ public class RoleService extends ServiceImpl<RoleMapper, RoleEntity> {
         if(userRoleService.exists(id)){
             throw new ServiceException(MessageConstant.ROLE_EXISTS);
         }
-        roleResourseService.delete(id);
+        roleResourceService.delete(id);
         super.removeById(id);
         return true;
     }

@@ -16,6 +16,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +37,8 @@ public class AuthenticationService {
 
     /**
      * 获取认证信息
-     * @author liulinchuan
-     * @since 2023/1/16 14:15
+     * @author wangsang
+     * @since 2023/7/16 14:15
      * @return 认证信息
      */
     public AuthDTO authInfo() {
@@ -57,8 +58,8 @@ public class AuthenticationService {
 
     /**
      * 修改密码
-     * @author liulinchuan
-     * @since 2023/2/2 11:03
+     * @author wangsang
+     * @since 2023/7/26 11:03
      * @param passwordDTO 密码信息
      * @return 是否修改成功
      */
@@ -68,7 +69,7 @@ public class AuthenticationService {
                 .unauthenticated(userInfo.getUsername(), passwordDTO.getPassword());
         try {
             authenticationManager.authenticate(authRequest);
-        } catch (BadCredentialsException e) {
+        }catch (BadCredentialsException e) {
             throw new ServiceException(MessageConstant.PASSWORD_ERROR);
         }
         UserEntity userEntity = new UserEntity();
