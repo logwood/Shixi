@@ -45,8 +45,20 @@ spring:
       host: localhost
       password: 12345
       port: 6379
-
-
+  mail:
+    protocol: smtp
+    host: smtp.qq.com
+    port: 587
+    username: 9990928@qq.com
+    password: xaavmttzmjqibhbb
+    test-connection: false
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
 springdoc:
   show-actuator: true
 
@@ -81,6 +93,8 @@ thinking:
       - /v3/api-docs/*
       - /v3/api-docs
       - /eureka/
+      - /email/sendSimpleMail
+      - /email/sendMineMail
       # end
 eureka:
   client:

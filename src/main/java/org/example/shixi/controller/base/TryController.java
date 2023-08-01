@@ -12,21 +12,18 @@ import me.zhyd.oauth.model.AuthResponse;
 import me.zhyd.oauth.model.AuthToken;
 import me.zhyd.oauth.model.AuthUser;
 import me.zhyd.oauth.request.AuthFeishuRequest;
-import me.zhyd.oauth.request.AuthGithubRequest;
 import me.zhyd.oauth.request.AuthRequest;
 import me.zhyd.oauth.utils.AuthStateUtils;
-import org.checkerframework.checker.units.qual.A;
 import org.example.shixi.controller.RestResponse;
 import org.example.shixi.service.base.UserParseService;
+import org.example.shixi.service.base.UserService;
+import org.example.shixi.tables.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 @Slf4j
 @Tag(name = "简单尝试")
 @RestController
@@ -35,6 +32,8 @@ public class TryController {
     // 创建授权request
     @Autowired
     UserParseService userParseService;
+    @Autowired
+    UserService userService;
     @Autowired
     PasswordEncoder passwordEncoder;
     @GetMapping
@@ -65,6 +64,11 @@ public class TryController {
 
         if (response.ok()) {
             userParseService.save(response.getData());
+            UserEntity userEntity = new UserEntity();
+            userEntity.setUsername(response.getData().getUsername());
+
+            userEntity.setName(response.getData().getNickname());
+            userService.add(userEntity);
             return RestResponse.ok("发送成功");
         }
 
